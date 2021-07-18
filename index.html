@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <title>Vue - Listagem, Inserção e Edição de Jogadores</title>
+    <link rel="stylesheet" href="./public/css/style.css" />
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h2>Listagem de Jogadores do Counter-Strike</h2>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nickname</th>
+            <th scope="col">Data de Nascimento</th>
+            <th scope="col">Quantidade de Estrelas</th>
+            <th scope="col">Patente</th>
+            <th scope="col">Status</th>
+            <th scope="col">Alterar</th>
+            <th scope="col">Remover</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(player, index) in players">
+            <td>{{player.index}}</td>
+            <td>{{player.nickname}}</td>
+            <td>{{player.birthDate}}</td>
+            <td>{{player.stars}}</td>
+            <td>{{player.patent.description}}</td>
+            <td v-if="player.status">
+              <input type="checkbox" checked disabled />
+            </td>
+            <td v-if="!player.status">
+              <input type="checkbox" disabled />
+            </td>
+            <td>
+              <button v-on:click="editPlayer(index)" class="btn" type="button">
+                Alterar
+              </button>
+            </td>
+            <td>
+              <button
+                v-on:click="removePlayer(index)"
+                class="btn"
+                type="button"
+              >
+                Remover
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <form id="form">
+        <h3>Formulário para cadastrar ou editar Jogadores</h3>
+
+        <div class="form-group">
+          <label for="inputIndex">ID:</label>
+          <input
+            type="text"
+            v-model="newPlayerObject.index"
+            id="inputIndex"
+            class="form-control short"
+            disabled
+          />
+        </div>
+        <div class="form-group horizontal">
+          <div class="form-group">
+            <label for="inputNickname">Nickname:</label>
+            <input
+              type="text"
+              v-model="newPlayerObject.nickname"
+              v-on:keypress="isLetter($event)"
+              maxlength="12"
+              id="inputNickname"
+              class="form-control large"
+              placeholder="Somente Letras..."
+            />
+          </div>
+          <div class="form-group">
+            <label for="inputBirthDate">Data de Nascimento</label>
+            <input
+              type="date"
+              v-model="newPlayerObject.birthDate"
+              id="inputBirthDate"
+              class="form-control medium"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="./public/js/app.js"></script>
+  </body>
+</html>

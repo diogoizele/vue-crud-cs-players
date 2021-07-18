@@ -1,0 +1,21 @@
+#form {
+  width: 80rem;
+}
+
+.large {
+  width: 50rem;
+}
+
+.medium {
+  width: 25rem;
+}
+
+.short {
+  width: 10rem;
+}
+
+.horizontal {
+  display: flex;
+  width: inherit;
+  justify-content: space-between;
+}
