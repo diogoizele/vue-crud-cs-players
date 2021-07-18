@@ -24,7 +24,7 @@
       <h2>Listagem de Jogadores do Counter-Strike</h2>
 
       <table class="table table-striped">
-        <thead>
+        <thead class="header-table">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Nickname</th>
@@ -50,14 +50,18 @@
               <input type="checkbox" disabled />
             </td>
             <td>
-              <button v-on:click="editPlayer(index)" class="btn" type="button">
+              <button
+                v-on:click="editPlayer(index)"
+                class="btn btn-info btn-sm"
+                type="button"
+              >
                 Alterar
               </button>
             </td>
             <td>
               <button
                 v-on:click="removePlayer(index)"
-                class="btn"
+                class="btn btn-danger btn-sm"
                 type="button"
               >
                 Remover
@@ -85,15 +89,14 @@
             <input
               type="text"
               v-model="newPlayerObject.nickname"
-              v-on:keypress="isLetter($event)"
               maxlength="12"
               id="inputNickname"
               class="form-control large"
-              placeholder="Somente Letras..."
+              placeholder="Digite seu nickname..."
             />
           </div>
           <div class="form-group">
-            <label for="inputBirthDate">Data de Nascimento</label>
+            <label for="inputBirthDate">Data de Nascimento:</label>
             <input
               type="date"
               v-model="newPlayerObject.birthDate"
@@ -101,6 +104,71 @@
               class="form-control medium"
             />
           </div>
+        </div>
+        <div class="form-group horizontal">
+          <div class="form-group">
+            <label for="inputStars">Quantidade de Estrelas:</label>
+            <input
+              type="number"
+              v-model="newPlayerObject.stars"
+              id="inputStars"
+              class="form-control medium"
+              v-on:keypressed="starValidation($event)"
+              placeholder="Número de estrelas..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inputStatus">Status de Atividade:</label>
+            <input
+              type="checkbox"
+              v-model="newPlayerObject.status"
+              id="inputStatus"
+              class="form-control checkbox"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="inputPassword">Senha:</label>
+            <input
+              type="password"
+              v-model="newPlayerObject.password"
+              maxlength="8"
+              id="inputPassword"
+              class="form-control medium"
+              placeholder="Até 8 caracteres..."
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="selectPatent">Patente:</label>
+          <select
+            v-model="newPlayerObject.patent"
+            id="selectPatent"
+            class="form-control medium"
+          >
+            <option value="">Escolha um item</option>
+            <option v-for="patent in patents" v-bind:value="patent">
+              {{patent.description}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <button
+            v-on:click="addOrEditPlayer()"
+            class="btn btn-success btn-lg"
+            type="button"
+          >
+            Salvar
+          </button>
+          <button
+            v-on:click="clearForm()"
+            class="btn btn-danger btn-lg"
+            type="button"
+          >
+            Limpar
+          </button>
         </div>
       </form>
     </div>

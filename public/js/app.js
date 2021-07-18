@@ -28,10 +28,10 @@ $(document).ready(function () {
       index: "",
       nickname: "",
       birthDate: "",
-      stars: 0,
+      stars: "",
       status: false,
       password: "",
-      patent: null,
+      patent: "",
     },
     errors: [],
   };
@@ -55,7 +55,14 @@ $(document).ready(function () {
         console.log(index);
       },
 
-      
+      starValidation(e) {
+        let star = +e.target.value;
+        if (star === 3) {
+          return true;
+        } else {
+          e.preventDefault();
+        }
+      },
     },
   });
 });
