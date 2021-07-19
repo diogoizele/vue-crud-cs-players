@@ -38,7 +38,7 @@
         </thead>
         <tbody>
           <tr v-for="(player, index) in players">
-            <td>{{player.index}}</td>
+            <td>{{index}}</td>
             <td>{{player.nickname}}</td>
             <td>{{player.birthDate}}</td>
             <td>{{player.stars}}</td>
@@ -70,6 +70,7 @@
           </tr>
         </tbody>
       </table>
+
       <form id="form">
         <h3>Formulário para cadastrar ou editar Jogadores</h3>
 
@@ -202,6 +203,12 @@
           >
             Limpar
           </button>
+          <p v-if="playerAdded" id="playerAdded" class="success-message">
+            Novo Jogador Adicionado!
+          </p>
+          <p v-if="playerEdited" id="playerEdited" class="success-message">
+            Jogador Editado!
+          </p>
         </div>
       </form>
     </div>

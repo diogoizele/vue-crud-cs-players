@@ -14,9 +14,9 @@ $(document).ready(function () {
 
     players: [
       {
-        index: 1,
+        index: 0,
         nickname: "JimmyZ647",
-        birthDate: "23/03/2002",
+        birthDate: "2002-03-23",
         stars: 5,
         status: true,
         password: "123diogo456",
@@ -42,6 +42,8 @@ $(document).ready(function () {
       password: false,
       patent: false,
     },
+    playerAdded: false,
+    playerEdited: false,
   };
 
   const myApp = new Vue({
@@ -69,23 +71,11 @@ $(document).ready(function () {
         }
       },
 
-      setId(array) {
-        let index = 0;
-
-        array.forEach((player) => {
-          if (player.index > index) {
-            index = player.index;
-          }
-        });
-        return index + 1;
-      },
-
       addOrEditPlayer(e) {
         let { index, nickname, birthDate, stars, status, password, patent } =
           this.newPlayerObject;
 
         let player = {
-          index: index || this.setId(this.players),
           nickname: nickname.trim(),
           birthDate,
           stars,
@@ -95,20 +85,52 @@ $(document).ready(function () {
         };
 
         if (this.inputValidation()) {
+          
+
           if (isNaN(parseInt(index))) {
+            // cria novo jogador
             this.players.push(player);
+            this.playerAdded = true;
+            setTimeout(() => {
+              this.playerAdded = false;
+            }, 3500);
+          } else {
+            // edita jogador
+            this.players[index] = player;
+            this.playerEdited = true;
+            setTimeout(() => {
+              this.playerEdited = false;
+            }, 3500);
           }
+
+          
+          this.clearForm();
         } else {
           e.preventDefault();
         }
       },
 
       editPlayer(index) {
-        console.log(index);
+        let { nickname, birthDate, stars, status, password, patent } =
+          this.players[index];
+
+        this.newPlayerObject.index = index;
+        this.newPlayerObject.nickname = nickname;
+        this.newPlayerObject.birthDate = birthDate;
+        this.newPlayerObject.stars = stars;
+        this.newPlayerObject.status = status;
+        this.newPlayerObject.password = password;
+        this.newPlayerObject.patent = patent;
       },
 
       removePlayer(index) {
-        console.log(index);
+        if (
+          confirm(
+            `Deseja mesmo excluir o jogador ${this.players[index].nickname}?`
+          )
+        ) {
+          this.players.splice(index, 1);
+        }
       },
 
       inputValidation() {
@@ -133,6 +155,16 @@ $(document).ready(function () {
         } else {
           return false;
         }
+      },
+
+      clearForm() {
+        this.newPlayerObject.index = "";
+        this.newPlayerObject.nickname = "";
+        this.newPlayerObject.birthDate = "";
+        this.newPlayerObject.stars = "";
+        this.newPlayerObject.status = false;
+        this.newPlayerObject.password = "";
+        this.newPlayerObject.patent = "";
       },
     },
   });

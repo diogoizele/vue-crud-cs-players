@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
 #form {
   width: 80rem;
 }
@@ -37,6 +43,15 @@
   font-size: 1.1rem;
   color: red;
   display: block;
+}
+
+.success-message {
+  color: rgb(107, 146, 47);
+}
+
+.invisible {
+  opacity: 0;
+  transition: 1s;
 }
 
 td {
