@@ -33,7 +33,15 @@ $(document).ready(function () {
       password: "",
       patent: "",
     },
-    errors: [],
+    errors: ["Este campo é obrigatório! *", "Escolha uma patente! *"],
+    invalid: {
+      nickname: false,
+      birthDate: false,
+      stars: false,
+      status: false,
+      password: false,
+      patent: false,
+    },
   };
 
   const myApp = new Vue({
@@ -47,6 +55,54 @@ $(document).ready(function () {
         else e.preventDefault(); // If not match, don't add to input text
       },
 
+      starValidation(e) {
+        let star = +e.key;
+        if (
+          !isNaN(star) &&
+          star >= 1 &&
+          star <= 5 &&
+          e.target.value.length < 1
+        ) {
+          return true;
+        } else {
+          e.preventDefault();
+        }
+      },
+
+      setId(array) {
+        let index = 0;
+
+        array.forEach((player) => {
+          if (player.index > index) {
+            index = player.index;
+          }
+        });
+        return index + 1;
+      },
+
+      addOrEditPlayer(e) {
+        let { index, nickname, birthDate, stars, status, password, patent } =
+          this.newPlayerObject;
+
+        let player = {
+          index: index || this.setId(this.players),
+          nickname: nickname.trim(),
+          birthDate,
+          stars,
+          status,
+          password: password.trim(),
+          patent,
+        };
+
+        if (this.inputValidation()) {
+          if (isNaN(parseInt(index))) {
+            this.players.push(player);
+          }
+        } else {
+          e.preventDefault();
+        }
+      },
+
       editPlayer(index) {
         console.log(index);
       },
@@ -55,12 +111,27 @@ $(document).ready(function () {
         console.log(index);
       },
 
-      starValidation(e) {
-        let star = +e.target.value;
-        if (star === 3) {
+      inputValidation() {
+        let elements = ["nickname", "birthDate", "stars", "password", "patent"];
+
+        elements.forEach((element) => {
+          if (!this.newPlayerObject[element]) {
+            this.invalid[element] = true;
+          } else {
+            this.invalid[element] = false;
+          }
+        });
+
+        if (
+          this.newPlayerObject.nickname &&
+          this.newPlayerObject.birthDate &&
+          this.newPlayerObject.stars &&
+          this.newPlayerObject.password &&
+          this.newPlayerObject.patent
+        ) {
           return true;
         } else {
-          e.preventDefault();
+          return false;
         }
       },
     },

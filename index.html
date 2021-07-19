@@ -86,9 +86,16 @@
         <div class="form-group horizontal">
           <div class="form-group">
             <label for="inputNickname">Nickname:</label>
+            <label
+              v-if="this.invalid.nickname"
+              for="inputNickname"
+              class="invalid-value"
+              >{{errors[0]}}</label
+            >
             <input
               type="text"
               v-model="newPlayerObject.nickname"
+              v-on:keypress="isLetter($event)"
               maxlength="12"
               id="inputNickname"
               class="form-control large"
@@ -97,6 +104,12 @@
           </div>
           <div class="form-group">
             <label for="inputBirthDate">Data de Nascimento:</label>
+            <label
+              v-if="this.invalid.birthDate"
+              for="inputNickname"
+              class="invalid-value"
+              >{{errors[0]}}</label
+            >
             <input
               type="date"
               v-model="newPlayerObject.birthDate"
@@ -108,12 +121,20 @@
         <div class="form-group horizontal">
           <div class="form-group">
             <label for="inputStars">Quantidade de Estrelas:</label>
+            <label
+              v-if="this.invalid.stars"
+              for="inputNickname"
+              class="invalid-value"
+              >{{errors[0]}}</label
+            >
             <input
               type="number"
               v-model="newPlayerObject.stars"
+              v-on:keypress="starValidation($event)"
+              max="5"
+              min="1"
               id="inputStars"
               class="form-control medium"
-              v-on:keypressed="starValidation($event)"
               placeholder="Número de estrelas..."
             />
           </div>
@@ -130,6 +151,12 @@
 
           <div class="form-group">
             <label for="inputPassword">Senha:</label>
+            <label
+              v-if="this.invalid.password"
+              for="inputNickname"
+              class="invalid-value"
+              >{{errors[0]}}</label
+            >
             <input
               type="password"
               v-model="newPlayerObject.password"
@@ -142,6 +169,12 @@
         </div>
         <div class="form-group">
           <label for="selectPatent">Patente:</label>
+          <label
+            v-if="this.invalid.patent"
+            for="inputNickname"
+            class="invalid-value"
+            >{{errors[1]}}</label
+          >
           <select
             v-model="newPlayerObject.patent"
             id="selectPatent"
@@ -156,7 +189,7 @@
 
         <div class="form-group">
           <button
-            v-on:click="addOrEditPlayer()"
+            v-on:click="addOrEditPlayer($event)"
             class="btn btn-success btn-lg"
             type="button"
           >

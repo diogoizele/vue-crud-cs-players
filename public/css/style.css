@@ -31,11 +31,15 @@
   font-size: 1.8rem;
   font-weight: normal;
   border-bottom: 4px solid black;
-
 }
 
+.invalid-value {
+  font-size: 1.1rem;
+  color: red;
+  display: block;
+}
 
 td {
-    border-bottom: 2px solid black;
-    font-size: 1.6rem;
+  border-bottom: 2px solid black;
+  font-size: 1.6rem;
 }
