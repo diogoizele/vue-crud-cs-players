@@ -1,1 +1,1 @@
-(Check The Application)[ttps://diogoizele.github.io/vue-crud-cs-players/]
+[check The Application](https://diogoizele.github.io/vue-crud-cs-players/)
