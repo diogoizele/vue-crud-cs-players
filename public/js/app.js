@@ -33,22 +33,41 @@ $(document).ready(function () {
       password: "",
       patent: "",
     },
-    errors: ["Este campo é obrigatório! *", "Escolha uma patente! *"],
-    invalid: {
-      nickname: false,
-      birthDate: false,
-      stars: false,
-      status: false,
-      password: false,
-      patent: false,
-    },
+
     playerAdded: false,
     playerEdited: false,
   };
 
+  Vue.use(window.vuelidate.default);
+
+  const { required, minLength, between } = window.validators;
+
   const myApp = new Vue({
     el: "#app",
     data: data,
+    validations: {
+      newPlayerObject: {
+        nickname: {
+          required,
+          minLength: minLength(5),
+        },
+        birthDate: {
+          required,
+          minValue: (value) => value < new Date().toISOString(),
+        },
+        stars: {
+          required,
+          between: between(1, 100),
+        },
+        patent: {
+          required,
+        },
+        password: {
+          required,
+          minLength: minLength(4),
+        },
+      },
+    },
     methods: {
       isLetter(e) {
         let char = String.fromCharCode(e.keyCode); // Get the character
@@ -71,7 +90,7 @@ $(document).ready(function () {
         }
       },
 
-      addOrEditPlayer(e) {
+      addOrEditPlayer(v) {
         let { index, nickname, birthDate, stars, status, password, patent } =
           this.newPlayerObject;
 
@@ -84,9 +103,7 @@ $(document).ready(function () {
           patent,
         };
 
-        if (this.inputValidation()) {
-          
-
+        if (!v.$invalid) {
           if (isNaN(parseInt(index))) {
             // cria novo jogador
             this.players.push(player);
@@ -103,10 +120,7 @@ $(document).ready(function () {
             }, 3500);
           }
 
-          
           this.clearForm();
-        } else {
-          e.preventDefault();
         }
       },
 
@@ -130,30 +144,6 @@ $(document).ready(function () {
           )
         ) {
           this.players.splice(index, 1);
-        }
-      },
-
-      inputValidation() {
-        let elements = ["nickname", "birthDate", "stars", "password", "patent"];
-
-        elements.forEach((element) => {
-          if (!this.newPlayerObject[element]) {
-            this.invalid[element] = true;
-          } else {
-            this.invalid[element] = false;
-          }
-        });
-
-        if (
-          this.newPlayerObject.nickname &&
-          this.newPlayerObject.birthDate &&
-          this.newPlayerObject.stars &&
-          this.newPlayerObject.password &&
-          this.newPlayerObject.patent
-        ) {
-          return true;
-        } else {
-          return false;
         }
       },
 

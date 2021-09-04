@@ -4,20 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      type="text/javascript"
-      src="https://code.jquery.com/jquery-3.1.1.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.js"
-    ></script>
+
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
     <title>Vue - Listagem, Inserção e Edição de Jogadores</title>
     <link rel="stylesheet" href="./public/css/style.css" />
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+    ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.4/dist/validators.min.js"></script>
   </head>
   <body>
     <div id="app" class="container">
@@ -88,14 +89,22 @@
           <div class="form-group">
             <label for="inputNickname">Nickname:</label>
             <label
-              v-if="this.invalid.nickname"
+              v-if="!$v.newPlayerObject.nickname.required"
               for="inputNickname"
               class="invalid-value"
-              >{{errors[0]}}</label
+              >Preencha o Campo Nickname</label
+            >
+            <label
+              v-if="!$v.newPlayerObject.nickname.minLength"
+              for="inputNickname"
+              class="invalid-value"
+              >O Campo Nickname deve ter no mímino
+              {{$v.newPlayerObject.nickname.$params.minLength.min}}
+              caracteres</label
             >
             <input
               type="text"
-              v-model="newPlayerObject.nickname"
+              v-model="$v.newPlayerObject.nickname.$model"
               v-on:keypress="isLetter($event)"
               maxlength="12"
               id="inputNickname"
@@ -106,14 +115,20 @@
           <div class="form-group">
             <label for="inputBirthDate">Data de Nascimento:</label>
             <label
-              v-if="this.invalid.birthDate"
-              for="inputNickname"
+              v-if="!$v.newPlayerObject.birthDate.required"
+              for="inputBirthDate"
               class="invalid-value"
-              >{{errors[0]}}</label
+              >Preencha o Campo Data de Nascimento</label
+            >
+            <label
+              v-if="!$v.newPlayerObject.birthDate.minValue"
+              for="inputBirthDate"
+              class="invalid-value"
+              >Informe uma data válida (anterior a data atual).</label
             >
             <input
               type="date"
-              v-model="newPlayerObject.birthDate"
+              v-model="$v.newPlayerObject.birthDate.$model"
               id="inputBirthDate"
               class="form-control medium"
             />
@@ -123,16 +138,23 @@
           <div class="form-group">
             <label for="inputStars">Quantidade de Estrelas:</label>
             <label
-              v-if="this.invalid.stars"
-              for="inputNickname"
+              v-if="!$v.newPlayerObject.stars.required"
+              for="inputStars"
               class="invalid-value"
-              >{{errors[0]}}</label
+              >Preencha o Campo Quantidade de Estrelas</label
+            >
+            <label
+              v-if="!$v.newPlayerObject.stars.between"
+              for="inputStars"
+              class="invalid-value"
+              >A quantidade de estrelas deve estar entre
+              {{$v.newPlayerObject.stars.$params.between.min}} e
+              {{$v.newPlayerObject.stars.$params.between.max}}</label
             >
             <input
               type="number"
-              v-model="newPlayerObject.stars"
-              v-on:keypress="starValidation($event)"
-              max="5"
+              v-model="$v.newPlayerObject.stars.$model"
+              max="100"
               min="1"
               id="inputStars"
               class="form-control medium"
@@ -153,10 +175,18 @@
           <div class="form-group">
             <label for="inputPassword">Senha:</label>
             <label
-              v-if="this.invalid.password"
-              for="inputNickname"
+              v-if="!$v.newPlayerObject.password.required"
+              for="inputPassword"
               class="invalid-value"
-              >{{errors[0]}}</label
+              >Preencha o Campo Senha</label
+            >
+            <label
+              v-if="!$v.newPlayerObject.password.minLength"
+              for="inputPassword"
+              class="invalid-value"
+              >O Campo Nickname deve ter no mímino
+              {{$v.newPlayerObject.password.$params.minLength.min}}
+              caracteres</label
             >
             <input
               type="password"
@@ -171,10 +201,10 @@
         <div class="form-group">
           <label for="selectPatent">Patente:</label>
           <label
-            v-if="this.invalid.patent"
-            for="inputNickname"
+            v-if="!$v.newPlayerObject.patent.required"
+            for="inputPatent"
             class="invalid-value"
-            >{{errors[1]}}</label
+            >Preencha o Campo Patente</label
           >
           <select
             v-model="newPlayerObject.patent"
@@ -190,7 +220,7 @@
 
         <div class="form-group">
           <button
-            v-on:click="addOrEditPlayer($event)"
+            v-on:click="addOrEditPlayer($v)"
             class="btn btn-success btn-lg"
             type="button"
           >
