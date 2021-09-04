@@ -6,23 +6,8 @@
 
 $(document).ready(function () {
   let data = {
-    patents: [
-      { code: 1, description: "Bronze" },
-      { code: 2, description: "Prata" },
-      { code: 3, description: "Ouro" },
-    ],
-
-    players: [
-      {
-        index: 0,
-        nickname: "JimmyZ647",
-        birthDate: "2002-03-23",
-        stars: 5,
-        status: true,
-        password: "123diogo456",
-        patent: { code: 3, description: "Ouro" },
-      },
-    ],
+    patents: [],
+    players: [],
 
     newPlayerObject: {
       index: "",
@@ -38,6 +23,7 @@ $(document).ready(function () {
     playerEdited: false,
   };
 
+  Vue.prototype.$http = axios;
   Vue.use(window.vuelidate.default);
 
   const { required, minLength, between } = window.validators;
@@ -134,7 +120,7 @@ $(document).ready(function () {
         this.newPlayerObject.stars = stars;
         this.newPlayerObject.status = status;
         this.newPlayerObject.password = password;
-        this.newPlayerObject.patent = patent;
+        this.newPlayerObject.patent = patent.name;
       },
 
       removePlayer(index) {
@@ -157,5 +143,48 @@ $(document).ready(function () {
         this.newPlayerObject.patent = "";
       },
     },
+    created() {
+      getPlayerFromWebService(
+        "http://localhost:4040/listPlayers",
+        this.players
+      );
+      getPatentFromWebService(
+        "http://localhost:4040/listPatents",
+        this.patents
+      );
+    },
   });
 });
+
+function getPlayerFromWebService(url, array) {
+  axios
+    .get(url)
+    .then((response) => response.data)
+    .then((data) => {
+      data.forEach((player) => {
+        array.push({
+          nickname: player.nickname,
+          birthDate: player.data_nascimento,
+          stars: player.qtd_estrela,
+          password: player.senha,
+          patent: { code: player.codigo, name: player.nome },
+          singInDate: player.data_cadastro,
+        });
+      });
+    });
+}
+
+function getPatentFromWebService(url, array) {
+  axios
+    .get(url)
+    .then((response) => response.data)
+    .then((data) =>
+      data.forEach((patent) => {
+        array.push({
+          code: patent.codigo,
+          name: patent.nome,
+          description: patent.descricao,
+        });
+      })
+    );
+}

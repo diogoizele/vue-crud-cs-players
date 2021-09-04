@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script src="https://unpkg.com/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
     <script src="https://unpkg.com/vuelidate@0.7.4/dist/validators.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
   </head>
   <body>
     <div id="app" class="container">
@@ -43,7 +44,7 @@
             <td>{{player.nickname}}</td>
             <td>{{player.birthDate}}</td>
             <td>{{player.stars}}</td>
-            <td>{{player.patent.description}}</td>
+            <td>{{player.patent.name}}</td>
             <td v-if="player.status">
               <input type="checkbox" checked disabled />
             </td>
@@ -212,8 +213,8 @@
             class="form-control medium"
           >
             <option value="">Escolha um item</option>
-            <option v-for="patent in patents" v-bind:value="patent">
-              {{patent.description}}
+            <option v-for="patent in patents" v-bind:value="patent.name">
+              {{patent.name}}
             </option>
           </select>
         </div>
